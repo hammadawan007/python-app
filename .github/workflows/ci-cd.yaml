@@ -1,1 +1,33 @@
+name: Build and Deploy Flask App
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${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 }
+
+    - name: Build Docker image
+      run: |
+        docker build -t ghcr.io/${hammadawan007/python-app}:latest .
+
+    - name: Push image to GHCR
+      run: |
+        docker push ghcr.io/${hammadawan007/python-app}:latest
 
